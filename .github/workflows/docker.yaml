@@ -59,10 +59,24 @@ jobs:
         with:
           name: spotbugs-report
           path: target/spotbugsXml.xml
-          
-      - name: Move reports to /docs
+
+      - name: Move REports to reports directory
         run: |
-          mkdir -p docs
-          mv target/site/apidocs docs/javadoc
-          mv target/site/jacoco docs/jacoco-report
-          mv target/spotbugsXml.xml docs/spotbugs-report.xml
+          mkdir -p docs/jacoco
+          mkdir -p docs/spotbugs
+          mkdir -p docs/javadoc
+          mv target/site/jacoco/* docs/jacoco
+          mv target/spotbugsXml.xml docs/jacoco 
+          mv target/site/apidocs/* docs/jacoco
+
+      - name: commit reports
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add docs/
+          git commit -m "Update JaCoCo coverage report"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+        
