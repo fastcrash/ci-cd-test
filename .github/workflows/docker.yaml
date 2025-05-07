@@ -70,13 +70,13 @@ jobs:
           echo "<h2>JaCoCo Report</h2>" >> docs/index.html
           echo "<iframe src='jacoco/index.html' width='100%' height='600px'></iframe>" >> docs/index.html
           echo "<h2>SpotBugs Report</h2>" >> docs/index.html
-          echo "<iframe src='spotbugs/spotbugs.html' width='100%' height='600px'></iframe>" >> docs/index.html
+          echo "<iframe src='spotbugs/spotbugsXml.xml' width='100%' height='600px'></iframe>" >> docs/index.html
           echo "<h2>Javadoc</h2>" >> docs/index.html
           echo "<iframe src='javadoc/index.html' width='100%' height='600px'></iframe>" >> docs/index.html
           echo "</body></html>" >> docs/index.html
 
       - name: Deploy Documentation
-        uses: JamesIves/github-pages-deploy-action@v4 
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs
           branch: gh-pages
