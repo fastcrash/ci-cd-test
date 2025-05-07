@@ -37,25 +37,25 @@ jobs:
         run: mvn test
 
       - name: Upload JAR artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: jar-file
           path: target/*.jar
 
       - name: Upload Javadoc artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: javadoc
           path: target/site/apidocs
 
       - name: Upload JaCoCo report artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: jacoco-report
           path: target/site/jacoco
 
       - name: Upload SpotBugs report artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: spotbugs-report
           path: target/spotbugsXml.xml
