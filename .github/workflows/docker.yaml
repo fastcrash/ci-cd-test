@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+  pages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -76,4 +80,3 @@ jobs:
         with:
           folder: docs
           branch: gh-pages
-          
