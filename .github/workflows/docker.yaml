@@ -31,7 +31,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build with Maven and generate reports
-        run: mvn clean verify jacoco:report javadoc:javadoc
+        run: mvn clean verify jacoco:report javadoc:javadoc spotbugs:spotbugs
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
@@ -60,11 +60,19 @@ jobs:
           cp -r target/site/apidocs/* docs/javadoc/
           cp -r target/spotbugsXml.xml docs/spotbugs/
 
-      - name: Commit and push reports
+      - name: Generate index html
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}
-          git add docs/
-          git commit -m "Update coverage and documentation reports" || echo "No changes to commit"
-          git push
+          echo "<html><body><h1>Project Reports</h1>" > docs/index.html
+          echo "<h2>JaCoCo Report</h2>" >> docs/index.html
+          echo "<iframe src='jacoco/index.html' width='100%' height='600px'></iframe>" >> docs/index.html
+          echo "<h2>SpotBugs Report</h2>" >> docs/index.html
+          echo "<iframe src='spotbugs/spotbugs.html' width='100%' height='600px'></iframe>" >> docs/index.html
+          echo "<h2>Javadoc</h2>" >> docs/index.html
+          echo "<iframe src='javadoc/index.html' width='100%' height='600px'></iframe>" >> docs/index.html
+          echo "</body></html>" >> docs/index.html
+
+      - name: Deploy Documentation
+        uses: JamesIves/github-pages-deploy-action@v4 
+        with:
+          folder: docs
+          branch: gh-pages
