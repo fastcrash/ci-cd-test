@@ -59,3 +59,10 @@ jobs:
         with:
           name: spotbugs-report
           path: target/spotbugsXml.xml
+          
+      - name: Move reports to /docs
+        run: |
+          mkdir -p docs
+          mv target/site/apidocs docs/javadoc
+          mv target/site/jacoco docs/jacoco-report
+          mv target/spotbugsXml.xml docs/spotbugs-report.xml
