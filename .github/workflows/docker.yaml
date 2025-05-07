@@ -30,11 +30,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build with Maven
-        run: mvn clean install
-
-      - name: Run tests
-        run: mvn test
+      - name: Build with Maven and generate reports
+        run: mvn clean verify jacoco:report javadoc:javadoc
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
@@ -54,29 +51,21 @@ jobs:
           name: jacoco-report
           path: target/site/jacoco
 
-      - name: Upload SpotBugs report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: spotbugs-report
-          path: target/spotbugsXml.xml
-
-      - name: Move REports to reports directory
+      - name: Move reports to docs directory
         run: |
           mkdir -p docs/jacoco
           mkdir -p docs/spotbugs
           mkdir -p docs/javadoc
-          mv target/site/jacoco/* docs/jacoco
-          mv target/spotbugsXml.xml docs/jacoco 
-          mv target/site/apidocs/* docs/jacoco
+          cp -r target/site/jacoco/* docs/jacoco/
+          cp -r target/site/apidocs/* docs/javadoc/
+          cp -r target/spotbugsXml.xml docs/spotbugs/
 
-      - name: commit reports
+      - name: Commit and push reports
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add docs/
-          git commit -m "Update JaCoCo coverage report"
+          git commit -m "Update coverage and documentation reports"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-        
